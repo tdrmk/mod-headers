@@ -1,47 +1,51 @@
 import { useState } from 'react'
 import styled from 'styled-components'
+import { colors, typography, borders } from '../theme.js'
 
 export const IconBtn = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  color: #999999;
+  color: ${colors.contentTertiary};
   padding: 2px 4px;
   line-height: 1;
   flex-shrink: 0;
-  font-family: inherit;
-  &:hover { color: #333333; }
+  font-family: ${typography.fontFamily};
+  border-radius: ${borders.radius100};
+  &:hover { color: ${colors.contentPrimary}; }
 `
 
 export const TextBtn = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  color: #757575;
-  font-size: 13px;
+  color: ${colors.contentSecondary};
+  font-size: ${typography.scale400};
+  font-family: ${typography.fontFamily};
   padding: 4px 0;
-  font-family: inherit;
-  &:hover { color: #000000; }
+  border-radius: ${borders.radius100};
+  &:hover { color: ${colors.contentPrimary}; }
 `
 
 export const FieldInput = styled.input`
-  border: 1px solid #E2E2E2;
-  border-radius: 4px;
-  padding: 2px 6px;
-  font-size: 13px;
-  font-family: inherit;
-  color: inherit;
+  border: 1px solid ${colors.borderAccessible};
+  border-radius: ${borders.radius100};
+  padding: 4px 8px;
+  font-size: ${typography.scale300};
+  font-family: ${typography.fontFamily};
+  color: ${colors.contentPrimary};
   width: 100%;
   outline: none;
-  background: #FFFFFF;
-  &:focus { border-color: #000000; }
-  &::placeholder { color: #999999; }
+  background: ${colors.backgroundPrimary};
+  &:focus { border-color: ${colors.borderSelected}; }
+  &::placeholder { color: ${colors.contentTertiary}; }
 `
 
 export const EmptyText = styled.span`
-  font-size: 13px;
-  color: #999999;
+  font-size: ${typography.scale300};
+  color: ${colors.contentTertiary};
   padding: 2px 0;
+  font-family: ${typography.fontFamily};
 `
 
 const ConfirmRow = styled.div`
@@ -52,26 +56,27 @@ const ConfirmRow = styled.div`
 `
 
 const ConfirmLabel = styled.span`
-  font-size: 12px;
-  color: #333333;
+  font-size: ${typography.scale200};
+  color: ${colors.contentSecondary};
+  font-family: ${typography.fontFamily};
 `
 
 const ConfirmBtn = styled.button`
-  background: #F3F3F3;
+  background: ${colors.backgroundSecondary};
   border: none;
-  border-radius: 4px;
+  border-radius: ${borders.radius200};
   cursor: pointer;
-  font-size: 12px;
-  font-family: inherit;
-  padding: 2px 8px;
-  color: #000000;
-  &:hover { background: #E2E2E2; }
+  font-size: ${typography.scale200};
+  font-family: ${typography.fontFamily};
+  padding: 4px 10px;
+  color: ${colors.contentPrimary};
+  &:hover { background: ${colors.backgroundTertiary}; }
 `
 
 const DeleteBtn = styled(ConfirmBtn)`
-  background: #000000;
-  color: #FFFFFF;
-  &:hover { background: #333333; }
+  background: ${colors.primary};
+  color: ${colors.primaryB};
+  &:hover { background: ${colors.mono900}; }
 `
 
 export function DeleteConfirm({ label, onDelete }) {

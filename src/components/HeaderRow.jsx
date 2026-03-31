@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { IconBtn, FieldInput } from './Shared.jsx'
+import { colors, typography } from '../theme.js'
 
 const Row = styled.div`
   display: flex;
@@ -10,15 +11,17 @@ const Row = styled.div`
 
 const HeaderName = styled.span`
   flex: 0 0 150px;
-  font-size: 13px;
+  font-size: ${typography.scale300};
   overflow: hidden;
+  font-family: ${typography.fontFamily};
 `
 
 const HeaderValue = styled.span`
   flex: 1;
-  font-size: 13px;
-  color: #545454;
+  font-size: ${typography.scale300};
+  color: ${colors.contentSecondary};
   overflow: hidden;
+  font-family: ${typography.fontFamily};
 `
 
 export default function HeaderRow({ header, onChange, onDelete }) {

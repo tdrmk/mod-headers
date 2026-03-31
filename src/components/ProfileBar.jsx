@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { TextBtn } from './Shared.jsx'
+import { colors, typography, borders } from '../theme.js'
 
 const Bar = styled.div`
   padding: 12px 16px;
@@ -14,15 +15,16 @@ const ProfileRow = styled.div`
 
 const ProfileSelect = styled.select`
   width: 60%;
-  border: 1px solid #CCCCCC;
-  border-radius: 4px;
-  padding: 5px 8px;
-  font-size: 14px;
-  font-family: inherit;
-  background: #FFFFFF;
+  border: 1px solid ${colors.borderAccessible};
+  border-radius: ${borders.radius200};
+  padding: 6px 10px;
+  font-size: ${typography.scale400};
+  font-family: ${typography.fontFamily};
+  color: ${colors.contentPrimary};
+  background: ${colors.backgroundPrimary};
   cursor: pointer;
   outline: none;
-  &:focus { border-color: #000000; }
+  &:focus { border-color: ${colors.borderSelected}; }
 `
 
 export default function ProfileBar({ profiles, activeProfileId, appliedProfileId, onSwitch, onAdd }) {

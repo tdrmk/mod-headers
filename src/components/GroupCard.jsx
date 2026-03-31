@@ -2,10 +2,11 @@ import { useState } from 'react'
 import styled from 'styled-components'
 import InlineEdit from './InlineEdit.jsx'
 import { IconBtn, TextBtn, FieldInput, DeleteConfirm } from './Shared.jsx'
+import { colors, typography, borders } from '../theme.js'
 
 const Card = styled.div`
-  border: 1px solid #E2E2E2;
-  border-radius: 6px;
+  border: 1px solid ${colors.borderOpaque};
+  border-radius: ${borders.radius200};
   padding: 0 0 8px;
   margin-bottom: 10px;
 `
@@ -30,21 +31,26 @@ const Toggle = styled.span`
   width: 16px;
   text-align: center;
   line-height: 1;
+  color: ${colors.contentTertiary};
+  &:hover { color: ${colors.contentPrimary}; }
 `
 
 const CardName = styled.span`
   flex: 1;
   margin: 0 8px;
   font-weight: 500;
-  font-size: 14px;
+  font-size: ${typography.scale400};
+  font-family: ${typography.fontFamily};
+  color: ${colors.contentPrimary};
 `
 
 const CardDescription = styled.div`
-  font-size: 12px;
-  color: #757575;
+  font-size: ${typography.scale200};
+  color: ${colors.contentSecondary};
   margin-bottom: 8px;
   min-height: 16px;
   padding: 0 12px;
+  font-family: ${typography.fontFamily};
 `
 
 const HeaderRow = styled.div`
@@ -56,15 +62,17 @@ const HeaderRow = styled.div`
 
 const GroupHeaderName = styled.span`
   flex: 0 0 130px;
-  font-size: 13px;
+  font-size: ${typography.scale300};
   overflow: hidden;
+  font-family: ${typography.fontFamily};
 `
 
 const GroupHeaderValue = styled.span`
   flex: 1;
-  font-size: 13px;
-  color: #545454;
+  font-size: ${typography.scale300};
+  color: ${colors.contentSecondary};
   overflow: hidden;
+  font-family: ${typography.fontFamily};
 `
 
 export default function GroupCard({ group, onUpdate, onDelete, onAddHeader, onUpdateHeader, onDeleteHeader }) {
@@ -77,7 +85,7 @@ export default function GroupCard({ group, onUpdate, onDelete, onAddHeader, onUp
           <Toggle onClick={() => setExpanded(true)}>+</Toggle>
           <CardName>
             <span style={{ cursor: 'pointer' }} onClick={() => setExpanded(true)}>
-              {group.name || <span style={{ color: '#999999' }}>Unnamed group</span>}
+              {group.name || <span style={{ color: colors.contentTertiary }}>Unnamed group</span>}
             </span>
           </CardName>
         </CardHeader>

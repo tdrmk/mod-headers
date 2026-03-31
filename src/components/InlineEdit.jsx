@@ -1,27 +1,30 @@
 import { useState, useEffect, useRef } from 'react'
 import styled from 'styled-components'
+import { colors, typography, borders } from '../theme.js'
 
 const EditSpan = styled.span`
   cursor: text;
-  border-radius: 2px;
+  border-radius: ${borders.radius100};
   min-width: 20px;
   display: inline-block;
-  &:hover { background: #F7F7F7; }
+  font-family: ${typography.fontFamily};
+  &:hover { background: ${colors.backgroundSecondary}; }
 `
 
 const Placeholder = styled.span`
-  color: #999999;
+  color: ${colors.contentTertiary};
 `
 
 const EditInput = styled.input`
-  border: 1px solid #000000;
-  border-radius: 4px;
+  border: 1px solid ${colors.borderSelected};
+  border-radius: ${borders.radius100};
   padding: 1px 5px;
   font-size: inherit;
-  font-family: inherit;
+  font-family: ${typography.fontFamily};
   width: 100%;
   outline: none;
-  color: inherit;
+  color: ${colors.contentPrimary};
+  background: ${colors.backgroundPrimary};
 `
 
 // Renders as plain text; clicking it turns it into an input.

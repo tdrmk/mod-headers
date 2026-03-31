@@ -6,20 +6,25 @@ import HeaderRow from './components/HeaderRow.jsx'
 import GroupCard from './components/GroupCard.jsx'
 import InlineEdit from './components/InlineEdit.jsx'
 import { TextBtn, EmptyText, DeleteConfirm } from './components/Shared.jsx'
+import { colors, typography, borders } from './theme.js'
 
 const Popup = styled.div`
   width: 480px;
+  font-family: ${typography.fontFamily};
+  color: ${colors.contentPrimary};
+  background: ${colors.backgroundPrimary};
 `
 
 const Loading = styled.div`
   padding: 24px 16px;
-  color: #757575;
-  font-size: 13px;
+  color: ${colors.contentTertiary};
+  font-size: ${typography.scale300};
+  font-family: ${typography.fontFamily};
 `
 
 const ProfileCard = styled.div`
-  border: 1px solid #E2E2E2;
-  border-radius: 6px;
+  border: 1px solid ${colors.borderOpaque};
+  border-radius: ${borders.radius200};
   margin: 0 16px 12px;
 `
 
@@ -31,24 +36,26 @@ const ProfileCardTop = styled.div`
 `
 
 const ActiveBadge = styled.span`
-  font-size: 11px;
+  font-size: ${typography.scale100};
   font-weight: 600;
-  color: #1A8917;
-  background: #E6F4E6;
-  border-radius: 10px;
-  padding: 1px 7px;
+  color: ${colors.positive};
+  background: ${colors.positiveLight};
+  border-radius: ${borders.radius300};
+  padding: 2px 8px;
   flex-shrink: 0;
+  font-family: ${typography.fontFamily};
 `
 
 const ProfileCardDescription = styled.div`
-  font-size: 12px;
-  color: #757575;
+  font-size: ${typography.scale200};
+  color: ${colors.contentSecondary};
   padding: 0 12px 8px;
   min-height: 16px;
+  font-family: ${typography.fontFamily};
 `
 
 const SectionWrapper = styled.div`
-  ${({ $border }) => $border && 'border-top: 1px solid #E2E2E2;'}
+  ${({ $border }) => $border && `border-top: 1px solid ${colors.borderOpaque};`}
   padding: 12px 16px;
 `
 
@@ -60,11 +67,12 @@ const SectionHeader = styled.div`
 `
 
 const SectionLabel = styled.span`
-  font-size: 11px;
+  font-size: ${typography.scale100};
   font-weight: 600;
-  color: #757575;
+  color: ${colors.contentTertiary};
   text-transform: uppercase;
   letter-spacing: 0.05em;
+  font-family: ${typography.fontFamily};
 `
 
 const GroupRow = styled.div`
@@ -76,7 +84,8 @@ const GroupRow = styled.div`
 
 const GroupRowName = styled.span`
   flex: 1;
-  font-size: 13px;
+  font-size: ${typography.scale300};
+  font-family: ${typography.fontFamily};
 `
 
 const EnableRow = styled.div`
@@ -85,49 +94,49 @@ const EnableRow = styled.div`
 
 const EnableBtn = styled.button`
   width: 100%;
-  padding: 10px;
-  background: #000000;
-  color: #FFFFFF;
+  padding: 12px;
+  background: ${colors.primary};
+  color: ${colors.primaryB};
   border: none;
-  border-radius: 6px;
-  font-size: 14px;
+  border-radius: ${borders.radius200};
+  font-size: ${typography.scale400};
   font-weight: 500;
   cursor: pointer;
-  font-family: inherit;
-  &:hover { background: #333333; }
+  font-family: ${typography.fontFamily};
+  &:hover { background: ${colors.mono900}; }
 `
 
 const DisableBtn = styled(EnableBtn)`
-  background: #F3F3F3;
-  color: #000000;
-  border: none;
-  &:hover { background: #E2E2E2; }
+  background: ${colors.backgroundSecondary};
+  color: ${colors.contentPrimary};
+  &:hover { background: ${colors.backgroundTertiary}; }
 `
 
 const RunningNotice = styled.div`
-  font-size: 12px;
-  color: #757575;
+  font-size: ${typography.scale200};
+  color: ${colors.contentTertiary};
   margin-top: 6px;
   text-align: center;
+  font-family: ${typography.fontFamily};
 `
 
 const BottomBar = styled.div`
   display: flex;
   gap: 8px;
   padding: 12px 16px;
-  border-top: 1px solid #E2E2E2;
+  border-top: 1px solid ${colors.borderOpaque};
 `
 
 const BarBtn = styled.button`
-  background: #F3F3F3;
+  background: ${colors.backgroundSecondary};
   border: none;
-  border-radius: 4px;
+  border-radius: ${borders.radius200};
   cursor: pointer;
-  font-size: 12px;
-  font-family: inherit;
-  padding: 4px 12px;
-  color: #000000;
-  &:hover { background: #E2E2E2; }
+  font-size: ${typography.scale200};
+  font-family: ${typography.fontFamily};
+  padding: 6px 14px;
+  color: ${colors.contentPrimary};
+  &:hover { background: ${colors.backgroundTertiary}; }
 `
 
 function Section({ label, action, children, border }) {
@@ -380,7 +389,7 @@ export default function App() {
       {activeProfile ? (
         <ProfileCard>
           <ProfileCardTop>
-            <div style={{ flex: 1, fontWeight: 500, fontSize: 14 }}>
+            <div style={{ flex: 1, fontWeight: 500, fontSize: typography.scale400 }}>
               <InlineEdit
                 value={activeProfile.name}
                 onChange={(v) => updateProfile(activeProfileId, { name: v })}
@@ -480,9 +489,9 @@ export default function App() {
       </Section>
 
       <BottomBar>
-        <BarBtn onClick={handleExport}>Export</BarBtn>
+        <BarBtn onClick={handleExport}>↑ Export</BarBtn>
         <label style={{ display: 'contents' }}>
-          <BarBtn as="span">Import</BarBtn>
+          <BarBtn as="span">↓ Import</BarBtn>
           <input
             type="file"
             accept=".json"
