@@ -2,8 +2,6 @@
 
 A Chrome extension for modifying HTTP request headers on a per-tab basis. Built for developers who need to inject auth tokens, test feature flags, or simulate different environments — without touching other tabs or needing a proxy.
 
-<img width="484" height="600" alt="sample image" src="https://github.com/user-attachments/assets/ce9084e4-40ff-4f71-8ca0-d4a4307815a2" />
-
 ## Features
 
 - **Profiles** — create multiple named configurations, each with its own headers and description
@@ -39,6 +37,8 @@ npm run build    # one-off production build into dist/
 Load `dist/` as an unpacked extension as described above. The build copies `manifest.json` from `public/` into `dist/` automatically, so `dist/` is fully self-contained.
 
 ## How It Works
+
+<img width="484" height="600" alt="Mod Headers popup showing the Local Dev profile with Auth group included and headers configured" src="https://github.com/user-attachments/assets/ce9084e4-40ff-4f71-8ca0-d4a4307815a2" />
 
 ### Technical details
 
