@@ -46,6 +46,49 @@ const ActiveBadge = styled.span`
   font-family: ${typography.fontFamily};
 `
 
+const ModeBtn = styled.button`
+  background: none;
+  border: 1px solid ${({ $active }) => $active ? colors.borderSelected : colors.borderAccessible};
+  border-radius: ${borders.radius200};
+  cursor: pointer;
+  font-size: ${typography.scale100};
+  font-family: ${typography.fontFamily};
+  padding: 2px 8px;
+  color: ${({ $active }) => $active ? colors.contentPrimary : colors.contentSecondary};
+  font-weight: ${({ $active }) => $active ? 600 : 400};
+  flex-shrink: 0;
+  &:hover { color: ${colors.contentPrimary}; border-color: ${colors.borderSelected}; }
+`
+
+const GroupChips = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  padding: 2px 0 4px;
+`
+
+const GroupChip = styled.span`
+  font-size: ${typography.scale200};
+  background: ${colors.backgroundSecondary};
+  border: 1px solid ${colors.borderOpaque};
+  border-radius: ${borders.radius300};
+  padding: 2px 8px;
+  font-family: ${typography.fontFamily};
+  color: ${colors.contentPrimary};
+`
+
+const HeaderReadOnlyList = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 2px 0 4px;
+`
+
+const HeaderReadOnlyItem = styled.div`
+  font-size: ${typography.scale300};
+  font-family: ${typography.fontFamily};
+`
+
 const ProfileCardDescription = styled.div`
   font-size: ${typography.scale200};
   color: ${colors.contentSecondary};
@@ -174,6 +217,9 @@ export default function App() {
   const [loading, setLoading] = useState(true)
   const [dragIndex, setDragIndex] = useState(null)
   const [groupDragIndex, setGroupDragIndex] = useState(null)
+  const [mode, setMode] = useState('readonly')
+
+  useEffect(() => { setMode('readonly') }, [activeProfileId])
 
   useEffect(() => {
     async function init() {
@@ -425,6 +471,8 @@ export default function App() {
               />
             </div>
             {enabled && appliedProfileId === activeProfileId && <ActiveBadge>Active</ActiveBadge>}
+            <ModeBtn $active={mode === 'edit'} onClick={() => setMode(mode === 'edit' ? 'readonly' : 'edit')}>Edit</ModeBtn>
+            <ModeBtn $active={mode === 'view'} onClick={() => setMode(mode === 'view' ? 'readonly' : 'view')}>View</ModeBtn>
             <DeleteConfirm label={`Delete "${activeProfile.name}"?`} onDelete={() => deleteProfile(activeProfileId)} />
           </ProfileCardTop>
           <ProfileCardDescription>
@@ -435,10 +483,11 @@ export default function App() {
             />
           </ProfileCardDescription>
 
+          {mode !== 'view' && (
           <Section label="Groups">
             {groups.filter((g) => g.headers.some((h) => h.name && h.value)).length === 0 ? (
               <EmptyText>No predefined groups with valid headers yet — add one below.</EmptyText>
-            ) : (() => {
+            ) : mode === 'edit' ? (() => {
               const validGroups = groups.filter((g) => g.headers.some((h) => h.name && h.value))
               const ordered = activeProfile.groupOrder
                 ? [
@@ -473,23 +522,80 @@ export default function App() {
                   <GroupRowName>{group.name}</GroupRowName>
                 </GroupRow>
               ))
+            })() : (() => {
+              const validGroups = groups.filter((g) => g.headers.some((h) => h.name && h.value))
+              const ordered = activeProfile.groupOrder
+                ? [
+                    ...activeProfile.groupOrder.map((id) => validGroups.find((g) => g.id === id)).filter(Boolean),
+                    ...validGroups.filter((g) => !activeProfile.groupOrder.includes(g.id)),
+                  ]
+                : validGroups
+              const selected = ordered.filter((g) => activeProfile.groupIds.includes(g.id))
+              return selected.length === 0
+                ? <EmptyText>No groups selected.</EmptyText>
+                : <GroupChips>{selected.map((g) => <GroupChip key={g.id}>{g.name}</GroupChip>)}</GroupChips>
             })()}
           </Section>
+          )}
 
           <Section label="Headers">
-            {activeProfile.headers.map((header, index) => (
-              <HeaderRow
-                key={header.id}
-                header={header}
-                onChange={(changes) => updateHeader(header.id, changes)}
-                onDelete={() => deleteHeader(header.id)}
-                onDragStart={() => setDragIndex(index)}
-                onDragOver={(e) => e.preventDefault()}
-                onDrop={() => { if (dragIndex !== null && dragIndex !== index) reorderHeaders(dragIndex, index); setDragIndex(null) }}
-                isDragging={dragIndex === index}
-              />
-            ))}
-            <TextBtn style={{ paddingLeft: 45, marginTop: 4 }} onClick={addHeader}>+ Add Header</TextBtn>
+            {mode === 'edit' ? (
+              <>
+                {activeProfile.headers.map((header, index) => (
+                  <HeaderRow
+                    key={header.id}
+                    header={header}
+                    onChange={(changes) => updateHeader(header.id, changes)}
+                    onDelete={() => deleteHeader(header.id)}
+                    onDragStart={() => setDragIndex(index)}
+                    onDragOver={(e) => e.preventDefault()}
+                    onDrop={() => { if (dragIndex !== null && dragIndex !== index) reorderHeaders(dragIndex, index); setDragIndex(null) }}
+                    isDragging={dragIndex === index}
+                  />
+                ))}
+                <TextBtn style={{ paddingLeft: 45, marginTop: 4 }} onClick={addHeader}>+ Add Header</TextBtn>
+              </>
+            ) : mode === 'view' ? (() => {
+              const orderedGroups = activeProfile.groupOrder
+                ? [
+                    ...activeProfile.groupOrder.map((id) => groups.find((g) => g.id === id)).filter(Boolean),
+                    ...groups.filter((g) => !activeProfile.groupOrder.includes(g.id)),
+                  ]
+                : groups
+              const resolved = []
+              for (const group of orderedGroups) {
+                if (activeProfile.groupIds.includes(group.id)) resolved.push(...group.headers)
+              }
+              resolved.push(...activeProfile.headers.filter((h) => h.enabled))
+              const effectiveMap = new Map()
+              for (const h of resolved.filter((h) => h.name && h.value)) {
+                effectiveMap.delete(h.name.toLowerCase())
+                effectiveMap.set(h.name.toLowerCase(), h)
+              }
+              const effective = [...effectiveMap.values()]
+              return effective.length === 0
+                ? <EmptyText>No headers will be sent.</EmptyText>
+                : <HeaderReadOnlyList>
+                    {effective.map((h, i) => (
+                      <HeaderReadOnlyItem key={i}>
+                        <span style={{ fontWeight: 500 }}>{h.name}</span>
+                        <span style={{ color: colors.contentSecondary }}>: {h.value}</span>
+                      </HeaderReadOnlyItem>
+                    ))}
+                  </HeaderReadOnlyList>
+            })() : (() => {
+              const activeHeaders = activeProfile.headers.filter((h) => h.enabled && h.name && h.value)
+              return activeHeaders.length === 0
+                ? <EmptyText>No headers enabled.</EmptyText>
+                : <HeaderReadOnlyList>
+                    {activeHeaders.map((h) => (
+                      <HeaderReadOnlyItem key={h.id}>
+                        <span style={{ fontWeight: 500 }}>{h.name}</span>
+                        <span style={{ color: colors.contentSecondary }}>: {h.value}</span>
+                      </HeaderReadOnlyItem>
+                    ))}
+                  </HeaderReadOnlyList>
+            })()}
           </Section>
 
           <EnableRow>
