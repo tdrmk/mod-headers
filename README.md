@@ -38,7 +38,7 @@ Load `dist/` as an unpacked extension as described above. The build copies `mani
 
 ## How It Works
 
-<img width="484" height="600" alt="Mod Headers popup showing the Local Dev profile with Auth group included and headers configured" src="https://github.com/user-attachments/assets/ce9084e4-40ff-4f71-8ca0-d4a4307815a2" />
+<img width="479" height="598" alt="Mod Headers popup showing the Local Dev profile with Auth group included and headers configured" src="https://github.com/user-attachments/assets/930c9810-60e3-4a12-99af-6c9f1a8cec3f" />
 
 ### Technical details
 
