@@ -159,6 +159,7 @@ export default function App() {
   const [enabled, setEnabled] = useState(false)
   const [appliedProfileId, setAppliedProfileId] = useState(null)
   const [loading, setLoading] = useState(true)
+  const [dragIndex, setDragIndex] = useState(null)
 
   useEffect(() => {
     async function init() {
@@ -246,6 +247,13 @@ export default function App() {
     updateProfile(activeProfileId, {
       headers: activeProfile.headers.filter((h) => h.id !== headerId),
     })
+  }
+
+  function reorderHeaders(from, to) {
+    const headers = [...activeProfile.headers]
+    const [item] = headers.splice(from, 1)
+    headers.splice(to, 0, item)
+    updateProfile(activeProfileId, { headers })
   }
 
   // ── Group inclusion in profile ────────────────────────────────────
@@ -427,12 +435,16 @@ export default function App() {
           </Section>
 
           <Section label="Headers">
-            {activeProfile.headers.map((header) => (
+            {activeProfile.headers.map((header, index) => (
               <HeaderRow
                 key={header.id}
                 header={header}
                 onChange={(changes) => updateHeader(header.id, changes)}
                 onDelete={() => deleteHeader(header.id)}
+                onDragStart={() => setDragIndex(index)}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={() => { if (dragIndex !== null && dragIndex !== index) reorderHeaders(dragIndex, index); setDragIndex(null) }}
+                isDragging={dragIndex === index}
               />
             ))}
             <TextBtn onClick={addHeader}>+ Add Header</TextBtn>

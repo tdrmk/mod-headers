@@ -58,6 +58,19 @@ const HeaderRow = styled.div`
   align-items: center;
   gap: 8px;
   padding: 3px 12px;
+  opacity: ${({ $dragging }) => ($dragging ? 0.4 : 1)};
+`
+
+const DragHandle = styled.span`
+  cursor: grab;
+  color: ${colors.contentTertiary};
+  flex-shrink: 0;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+  user-select: none;
+  &:hover { color: ${colors.contentSecondary}; }
+  &:active { cursor: grabbing; }
 `
 
 const GroupHeaderName = styled.span`
@@ -77,6 +90,14 @@ const GroupHeaderValue = styled.span`
 
 export default function GroupCard({ group, onUpdate, onDelete, onAddHeader, onUpdateHeader, onDeleteHeader }) {
   const [expanded, setExpanded] = useState(false)
+  const [dragIndex, setDragIndex] = useState(null)
+
+  function reorderHeaders(from, to) {
+    const headers = [...group.headers]
+    const [item] = headers.splice(from, 1)
+    headers.splice(to, 0, item)
+    onUpdate({ headers })
+  }
 
   if (!expanded) {
     return (
@@ -115,8 +136,17 @@ export default function GroupCard({ group, onUpdate, onDelete, onAddHeader, onUp
         />
       </CardDescription>
 
-      {group.headers.map((header) => (
-        <HeaderRow key={header.id}>
+      {group.headers.map((header, index) => (
+        <HeaderRow
+          key={header.id}
+          $dragging={dragIndex === index}
+          draggable
+          onDragStart={() => setDragIndex(index)}
+          onDragOver={(e) => e.preventDefault()}
+          onDrop={() => { if (dragIndex !== null && dragIndex !== index) reorderHeaders(dragIndex, index); setDragIndex(null) }}
+          onDragEnd={() => setDragIndex(null)}
+        >
+          <DragHandle title="Drag to reorder">⠿</DragHandle>
           <GroupHeaderName>
             <FieldInput
               value={header.name}

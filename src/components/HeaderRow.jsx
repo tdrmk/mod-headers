@@ -7,6 +7,19 @@ const Row = styled.div`
   align-items: center;
   gap: 8px;
   padding: 3px 0;
+  opacity: ${({ $dragging }) => ($dragging ? 0.4 : 1)};
+`
+
+const DragHandle = styled.span`
+  cursor: grab;
+  color: ${colors.contentTertiary};
+  flex-shrink: 0;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+  user-select: none;
+  &:hover { color: ${colors.contentSecondary}; }
+  &:active { cursor: grabbing; }
 `
 
 const HeaderName = styled.span`
@@ -24,9 +37,17 @@ const HeaderValue = styled.span`
   font-family: ${typography.fontFamily};
 `
 
-export default function HeaderRow({ header, onChange, onDelete }) {
+export default function HeaderRow({ header, onChange, onDelete, onDragStart, onDragOver, onDrop, isDragging }) {
   return (
-    <Row>
+    <Row
+      $dragging={isDragging}
+      draggable
+      onDragStart={onDragStart}
+      onDragOver={onDragOver}
+      onDrop={onDrop}
+      onDragEnd={onDrop}
+    >
+      <DragHandle title="Drag to reorder">⠿</DragHandle>
       <input
         type="checkbox"
         checked={header.enabled}
