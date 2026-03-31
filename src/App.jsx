@@ -31,6 +31,7 @@ const ProfileCard = styled.div`
 const ProfileCardTop = styled.div`
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 4px;
   padding: 8px 12px 4px;
 `
@@ -473,7 +474,7 @@ export default function App() {
             {enabled && appliedProfileId === activeProfileId && <ActiveBadge>Active</ActiveBadge>}
             <ModeBtn $active={mode === 'edit'} onClick={() => setMode(mode === 'edit' ? 'readonly' : 'edit')}>Edit</ModeBtn>
             <ModeBtn $active={mode === 'view'} onClick={() => setMode(mode === 'view' ? 'readonly' : 'view')}>View</ModeBtn>
-            <DeleteConfirm label={`Delete "${activeProfile.name}"?`} onDelete={() => deleteProfile(activeProfileId)} />
+            <DeleteConfirm key={activeProfileId} label={`Delete "${activeProfile.name}"?`} onDelete={() => deleteProfile(activeProfileId)} />
           </ProfileCardTop>
           <ProfileCardDescription>
             <InlineEdit

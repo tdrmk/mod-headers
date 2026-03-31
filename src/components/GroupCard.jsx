@@ -20,6 +20,7 @@ const CardHeader = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
   margin-bottom: 4px;
   padding: 4px 12px;
 `

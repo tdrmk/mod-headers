@@ -12,11 +12,13 @@ export const colors = {
   contentSecondary: '#545454',
   contentTertiary: '#767676',
   contentInversePrimary: '#FFFFFF',
+  contentNegative: '#DE1135',
 
   // Borders — Border/*, Border++/*
   borderOpaque: '#E2E2E2',       // Border/borderOpaque — card edges, dividers
   borderAccessible: '#CBCBCB',   // Border/borderAccessible — 3:1 contrast on neutral bg
   borderSelected: '#000000',     // Border/borderSelected — focused/active state
+  borderNegative: '#DE1135',
 
   // Primitive mono scale
   mono900: '#333333',

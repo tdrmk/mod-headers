@@ -52,12 +52,14 @@ const ConfirmRow = styled.div`
   display: flex;
   align-items: center;
   gap: 6px;
-  flex-shrink: 0;
+  flex: 0 0 100%;
+  margin-top: 4px;
+  justify-content: flex-end;
 `
 
 const ConfirmLabel = styled.span`
   font-size: ${typography.scale200};
-  color: ${colors.contentSecondary};
+  color: ${colors.contentNegative};
   font-family: ${typography.fontFamily};
 `
 
