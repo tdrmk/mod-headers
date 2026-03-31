@@ -1,0 +1,54 @@
+{
+  "profiles": [
+    {
+      "id": "profile-001",
+      "name": "Local Dev",
+      "description": "Overrides for local development against staging APIs",
+      "groupIds": ["group-001"],
+      "headers": [
+        { "id": "h-001", "name": "X-Debug-Mode", "value": "true", "enabled": true },
+        { "id": "h-002", "name": "X-Feature-Flag", "value": "new-checkout", "enabled": true },
+        { "id": "h-003", "name": "X-Request-ID", "value": "dev-session-42", "enabled": false }
+      ]
+    },
+    {
+      "id": "profile-002",
+      "name": "QA Testing",
+      "description": "Headers for QA environment with test user context",
+      "groupIds": ["group-001", "group-002"],
+      "headers": [
+        { "id": "h-004", "name": "X-Test-User", "value": "qa-bot@example.com", "enabled": true },
+        { "id": "h-005", "name": "X-Skip-Cache", "value": "1", "enabled": true }
+      ]
+    },
+    {
+      "id": "profile-003",
+      "name": "Production Read-Only",
+      "description": "Safe headers for inspecting production — no mutations",
+      "groupIds": [],
+      "headers": [
+        { "id": "h-006", "name": "X-Read-Only", "value": "true", "enabled": true }
+      ]
+    }
+  ],
+  "groups": [
+    {
+      "id": "group-001",
+      "name": "Auth Headers",
+      "description": "Bearer token and API key for internal services",
+      "headers": [
+        { "id": "gh-001", "name": "Authorization", "value": "Bearer dev-token-abc123" },
+        { "id": "gh-002", "name": "X-API-Key", "value": "sk-dev-0000000000000001" }
+      ]
+    },
+    {
+      "id": "group-002",
+      "name": "CORS Overrides",
+      "description": "Force permissive CORS for cross-origin testing",
+      "headers": [
+        { "id": "gh-003", "name": "Origin", "value": "https://localhost:3000" },
+        { "id": "gh-004", "name": "X-Forwarded-Host", "value": "localhost:3000" }
+      ]
+    }
+  ]
+}
