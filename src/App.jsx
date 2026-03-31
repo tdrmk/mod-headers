@@ -80,6 +80,19 @@ const GroupRow = styled.div`
   align-items: center;
   gap: 8px;
   padding: 3px 0;
+  opacity: ${({ $dragging }) => ($dragging ? 0.4 : 1)};
+`
+
+const GroupDragHandle = styled.span`
+  cursor: grab;
+  color: ${colors.contentTertiary};
+  flex-shrink: 0;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 2px;
+  user-select: none;
+  &:hover { color: ${colors.contentSecondary}; }
+  &:active { cursor: grabbing; }
 `
 
 const GroupRowName = styled.span`
@@ -160,6 +173,7 @@ export default function App() {
   const [appliedProfileId, setAppliedProfileId] = useState(null)
   const [loading, setLoading] = useState(true)
   const [dragIndex, setDragIndex] = useState(null)
+  const [groupDragIndex, setGroupDragIndex] = useState(null)
 
   useEffect(() => {
     async function init() {
@@ -319,10 +333,16 @@ export default function App() {
 
   async function handleEnable() {
     // Resolve: all group headers (no per-header toggle in groups) first, then individually-enabled profile headers.
+    // Apply order follows the per-profile groupOrder (falls back to global groups order).
     const headers = []
-    for (const groupId of activeProfile.groupIds) {
-      const group = groups.find((g) => g.id === groupId)
-      if (group) headers.push(...group.headers)
+    const orderedGroups = activeProfile.groupOrder
+      ? [
+          ...activeProfile.groupOrder.map((id) => groups.find((g) => g.id === id)).filter(Boolean),
+          ...groups.filter((g) => !activeProfile.groupOrder.includes(g.id)),
+        ]
+      : groups
+    for (const group of orderedGroups) {
+      if (activeProfile.groupIds.includes(group.id)) headers.push(...group.headers)
     }
     headers.push(...activeProfile.headers.filter((h) => h.enabled))
 
@@ -418,20 +438,42 @@ export default function App() {
           <Section label="Groups">
             {groups.filter((g) => g.headers.some((h) => h.name && h.value)).length === 0 ? (
               <EmptyText>No predefined groups with valid headers yet — add one below.</EmptyText>
-            ) : (
-              groups
-                .filter((g) => g.headers.some((h) => h.name && h.value))
-                .map((group) => (
-                  <GroupRow key={group.id}>
-                    <input
-                      type="checkbox"
-                      checked={activeProfile.groupIds.includes(group.id)}
-                      onChange={() => toggleGroupInProfile(group.id)}
-                    />
-                    <GroupRowName>{group.name}</GroupRowName>
-                  </GroupRow>
-                ))
-            )}
+            ) : (() => {
+              const validGroups = groups.filter((g) => g.headers.some((h) => h.name && h.value))
+              const ordered = activeProfile.groupOrder
+                ? [
+                    ...activeProfile.groupOrder.map((id) => validGroups.find((g) => g.id === id)).filter(Boolean),
+                    ...validGroups.filter((g) => !activeProfile.groupOrder.includes(g.id)),
+                  ]
+                : validGroups
+              return ordered.map((group, index, arr) => (
+                <GroupRow
+                  key={group.id}
+                  $dragging={groupDragIndex === index}
+                  draggable
+                  onDragStart={() => setGroupDragIndex(index)}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={() => {
+                    if (groupDragIndex !== null && groupDragIndex !== index) {
+                      const reordered = [...arr]
+                      const [item] = reordered.splice(groupDragIndex, 1)
+                      reordered.splice(index, 0, item)
+                      updateProfile(activeProfileId, { groupOrder: reordered.map((g) => g.id) })
+                    }
+                    setGroupDragIndex(null)
+                  }}
+                  onDragEnd={() => setGroupDragIndex(null)}
+                >
+                  <GroupDragHandle title="Drag to reorder">⠿</GroupDragHandle>
+                  <input
+                    type="checkbox"
+                    checked={activeProfile.groupIds.includes(group.id)}
+                    onChange={() => toggleGroupInProfile(group.id)}
+                  />
+                  <GroupRowName>{group.name}</GroupRowName>
+                </GroupRow>
+              ))
+            })()}
           </Section>
 
           <Section label="Headers">
