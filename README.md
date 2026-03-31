@@ -8,7 +8,9 @@ A Chrome extension for modifying HTTP request headers on a per-tab basis. Built 
 - **Predefined groups** — reusable header sets that can be included in any profile via checkbox
 - **Per-tab activation** — enabling a profile only affects the current tab; other tabs are untouched
 - **Badge indicator** — the extension icon shows "ON" when headers are active on the current tab
-- **Inline editing** — edit profile names, descriptions, and header names/values directly in the popup
+- **Read / Edit / View modes** — profiles open in readonly mode; switch to Edit to modify headers and group inclusion, or View to see the fully resolved set of headers that will actually be sent (deduplicated, last-write-wins)
+- **Drag-to-reorder** — drag headers within a profile, and drag groups to set their application order per profile
+- **Export / Import** — back up and restore all profiles and groups as a JSON file
 - **Sync storage** — profiles and groups are stored in `chrome.storage.sync`, so they follow you across devices
 
 ## Getting Started
@@ -54,9 +56,9 @@ Profile and group data is persisted in `chrome.storage.sync` via a thin storage 
 
 1. **Popup opens** — loads all profiles and groups from `chrome.storage.sync`, queries the active tab's ID, and checks with the service worker whether that tab currently has rules applied.
 
-2. **User selects a profile** — the popup shows the profile's direct headers (each with an enable/disable toggle) and which predefined groups are included via checkboxes.
+2. **User selects a profile** — the popup opens in readonly mode, showing enabled headers and included groups as chips. Switch to **Edit** mode to modify headers, toggle group inclusion, or drag groups to set their application order. Switch to **View** mode to preview the fully resolved, deduplicated header set that will be sent.
 
-3. **Enable** — the popup resolves the full header list: all headers from included groups (always applied), plus direct headers that are individually toggled on. It sends an `ENABLE_TAB` message to the service worker with this list and the active tab's ID.
+3. **Enable** — the popup resolves the full header list: all headers from included groups in their per-profile order (falling back to global group order), followed by directly-added headers that are individually toggled on. Duplicate header names are last-write-wins. It sends an `ENABLE_TAB` message to the service worker with this list and the active tab's ID.
 
 4. **Service worker applies rules** — removes any existing rules for that tab, then registers new `declarativeNetRequest` session rules, one per header. A persisted counter in session storage ensures rule IDs are unique across service worker restarts. The tab's badge is set to "ON".
 
