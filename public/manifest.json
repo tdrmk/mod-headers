@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "Mod Headers",
+  "version": "0.1.0",
+  "description": "Modify request headers per tab",
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestFeedback",
+    "storage",
+    "tabs"
+  ],
+  "host_permissions": ["<all_urls>"],
+  "action": {
+    "default_popup": "popup.html",
+    "default_title": "Mod Headers"
+  },
+  "background": {
+    "service_worker": "service-worker.js",
+    "type": "module"
+  }
+}
