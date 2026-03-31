@@ -20,7 +20,7 @@ export const TextBtn = styled.button`
   border: none;
   cursor: pointer;
   color: ${colors.contentSecondary};
-  font-size: ${typography.scale400};
+  font-size: ${typography.scale200};
   font-family: ${typography.fontFamily};
   padding: 4px 0;
   border-radius: ${borders.radius100};

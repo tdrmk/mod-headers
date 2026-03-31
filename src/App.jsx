@@ -489,7 +489,7 @@ export default function App() {
                 isDragging={dragIndex === index}
               />
             ))}
-            <TextBtn onClick={addHeader}>+ Add Header</TextBtn>
+            <TextBtn style={{ paddingLeft: 45, marginTop: 4 }} onClick={addHeader}>+ Add Header</TextBtn>
           </Section>
 
           <EnableRow>

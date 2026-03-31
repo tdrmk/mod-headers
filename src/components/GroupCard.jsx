@@ -165,7 +165,7 @@ export default function GroupCard({ group, onUpdate, onDelete, onAddHeader, onUp
         </HeaderRow>
       ))}
 
-      <TextBtn style={{ paddingLeft: 12, marginTop: 6 }} onClick={onAddHeader}>+ Add Header</TextBtn>
+      <TextBtn style={{ paddingLeft: 36, marginTop: 4 }} onClick={onAddHeader}>+ Add Header</TextBtn>
     </Card>
   )
 }
