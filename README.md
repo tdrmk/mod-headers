@@ -2,6 +2,8 @@
 
 A Chrome extension for modifying HTTP request headers on a per-tab basis. Built for developers who need to inject auth tokens, test feature flags, or simulate different environments — without touching other tabs or needing a proxy.
 
+<img width="484" height="600" alt="sample image" src="https://github.com/user-attachments/assets/ce9084e4-40ff-4f71-8ca0-d4a4307815a2" />
+
 ## Features
 
 - **Profiles** — create multiple named configurations, each with its own headers and description
