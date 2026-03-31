@@ -38,7 +38,7 @@ async function enableTab(tabId, headers, profileId) {
 
   const rules = validHeaders.map((header, index) => ({
     id: ruleCounter + index,
-    priority: 1,
+    priority: index + 1,
     condition: { tabIds: [tabId] },
     action: {
       type: 'modifyHeaders',
