@@ -56,7 +56,7 @@ const ProfileCardDescription = styled.div`
 
 const SectionWrapper = styled.div`
   ${({ $border }) => $border && `border-top: 1px solid ${colors.borderOpaque};`}
-  padding: 12px 16px;
+  padding: 6px 16px;
 `
 
 const SectionHeader = styled.div`
@@ -102,7 +102,7 @@ const GroupRowName = styled.span`
 `
 
 const EnableRow = styled.div`
-  padding: 12px 16px;
+  padding: 6px 16px;
 `
 
 const EnableBtn = styled.button`

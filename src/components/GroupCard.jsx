@@ -49,7 +49,7 @@ const CardDescription = styled.div`
   color: ${colors.contentSecondary};
   margin-bottom: 8px;
   min-height: 16px;
-  padding: 0 12px;
+  padding: 0 12px 0 36px;
   font-family: ${typography.fontFamily};
 `
 
