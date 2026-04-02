@@ -75,6 +75,17 @@ async function disableTab(tabId) {
   }
 }
 
+// Restore badge after page refresh — Chrome resets per-tab badge text on navigation.
+chrome.tabs.onUpdated.addListener(async (tabId, changeInfo) => {
+  if (changeInfo.status !== 'complete') return
+  const result = await chrome.storage.session.get(`tab_${tabId}`)
+  const ruleIds = result[`tab_${tabId}`] ?? []
+  if (ruleIds.length > 0) {
+    await chrome.action.setBadgeText({ text: 'ON', tabId })
+    await chrome.action.setBadgeBackgroundColor({ color: '#1A8917', tabId })
+  }
+})
+
 async function isTabEnabled(tabId) {
   const result = await chrome.storage.session.get([`tab_${tabId}`, `tab_${tabId}_profileId`])
   const ruleIds = result[`tab_${tabId}`] ?? []
