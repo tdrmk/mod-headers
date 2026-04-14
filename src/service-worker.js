@@ -39,7 +39,14 @@ async function enableTab(tabId, headers, profileId) {
   const rules = validHeaders.map((header, index) => ({
     id: ruleCounter + index,
     priority: index + 1,
-    condition: { tabIds: [tabId] },
+    condition: {
+      tabIds: [tabId],
+      resourceTypes: [
+        'main_frame', 'sub_frame', 'stylesheet', 'script', 'image',
+        'font', 'object', 'xmlhttprequest', 'ping', 'csp_report',
+        'media', 'websocket', 'webtransport', 'webbundle', 'other',
+      ],
+    },
     action: {
       type: 'modifyHeaders',
       requestHeaders: [
